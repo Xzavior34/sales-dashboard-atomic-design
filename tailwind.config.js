@@ -1,10 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // CRITICAL: This 'content' array must list all directories containing your classes.
+  // FINAL FIX: This content array explicitly targets files inside the 'src' folder
+  // which is where your Vercel logs showed the dashboard component lives.
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}", // Scans your current page.tsx
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}", 
-    "./components/**/*.{js,ts,jsx,tsx,mdx}", 
+    "./src/**/*.{js,ts,jsx,tsx,mdx}", 
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
