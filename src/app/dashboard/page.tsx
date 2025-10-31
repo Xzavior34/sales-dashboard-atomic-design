@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  LineChart, Line, BarChart, Bar, PieChart, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  // Added 'Pie' here
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 
 // FIX: Corrected icon imports from lucide-react by using aliasing
@@ -144,8 +145,8 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Sales by Product Mix</h2>
           <ResponsiveContainer width="100%" height="85%">
             <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-              {/* PieChart component from recharts is used here */}
-              <PieChart 
+              {/* CORRECTED: Changed PieChart to Pie for the series component */}
+              <Pie 
                 data={mockProductData}
                 dataKey="value"
                 nameKey="name"
@@ -159,7 +160,7 @@ export default function DashboardPage() {
                 {mockProductData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
-              </PieChart>
+              </Pie>
               <Tooltip 
                 formatter={(value, name, props) => [`$${(value as number).toLocaleString()}`, name]}
                 contentStyle={{ borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}
