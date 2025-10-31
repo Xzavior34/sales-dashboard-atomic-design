@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import { 
     DollarSign, 
-    Filter, 
     TrendingUp, 
     Cpu, 
     BarChart as BarChartIcon,
@@ -62,15 +61,14 @@ const mockProductData: ProductData[] = [
 
 const COLORS = mockProductData.map(d => d.color);
 
-// Function to simulate filtering data
 const filterData = (data: SalesData[], filter: FilterType): SalesData[] => {
     switch (filter) {
         case 'Q1':
-            return data.slice(0, 3); // Jan, Feb, Mar
+            return data.slice(0, 3);
         case 'Q2':
-            return data.slice(3, 6); // Apr, May, Jun
+            return data.slice(3, 6);
         case 'H1':
-            return data.slice(0, 6); // Jan - Jun
+            return data.slice(0, 6);
         case 'YTD':
         default:
             return data;
@@ -95,15 +93,14 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, color }) 
     </div>
 );
 
-// This wrapper is CRITICAL for Recharts. It prevents hydration errors by only
-// rendering the chart on the client after the component has mounted.
-const ChartContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// CRITICAL: Wrapper to prevent Recharts hydration errors (TypeScript Fixed)
+const ChartContainer: React.FC<{ children: React.ReactElement }> = ({ children }) => {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
-    // Render a placeholder until the component is mounted on the client
+    // Render a placeholder only until the component is mounted on the client
     if (!isMounted) {
         return <div className="h-full w-full flex items-center justify-center text-gray-400">Loading charts...</div>;
     }
@@ -124,10 +121,10 @@ export default function DashboardPage() {
     const totalSales = useMemo(() => filteredData.reduce((sum, item) => sum + item.sales, 0), [filteredData]);
 
     const stats = useMemo(() => [
-        { title: `Total Revenue (${filter})`, value: `$${totalRevenue.toLocaleString()}`, icon: DollarSign, color: '#2563eb' }, // blue-600
-        { title: `Units Sold (${filter})`, value: totalSales.toLocaleString(), icon: BarChartIcon, color: '#059669' }, // emerald-600
-        { title: 'Growth Rate', value: '+12.5%', icon: TrendingUp, color: '#d97706' }, // amber-600
-        { title: 'Conversion', value: '3.1%', icon: Cpu, color: '#b91c1c' }, // red-700
+        { title: `Total Revenue (${filter})`, value: `$${totalRevenue.toLocaleString()}`, icon: DollarSign, color: '#2563eb' },
+        { title: `Units Sold (${filter})`, value: totalSales.toLocaleString(), icon: BarChartIcon, color: '#059669' },
+        { title: 'Growth Rate', value: '+12.5%', icon: TrendingUp, color: '#d97706' },
+        { title: 'Conversion', value: '3.1%', icon: Cpu, color: '#b91c1c' },
     ], [totalRevenue, totalSales, filter]);
 
     const filterOptions: FilterType[] = ['YTD', 'H1', 'Q2', 'Q1'];
@@ -189,7 +186,9 @@ export default function DashboardPage() {
                 />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '10px' }} />
                 
+                {/* Bar for Revenue */}
                 <Bar yAxisId="left" dataKey="revenue" fill="#2563eb" name="Revenue" radius={[6, 6, 0, 0]} />
+                {/* Line for Sales Volume (Combo Chart) */}
                 <Line yAxisId="right" type="monotone" dataKey="sales" stroke="#059669" name="Sales Volume" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
             </BarChart>
           </ChartContainer>
@@ -207,10 +206,10 @@ export default function DashboardPage() {
                 cx="50%"
                 cy="50%"
                 outerRadius={120}
+                innerRadius={70} // Creates a Donut Chart
                 fill="#8884d8"
                 labelLine={false}
-                label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                innerRadius={60} // Added inner radius for donut chart effect
+                label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
               >
                 {mockProductData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -220,7 +219,7 @@ export default function DashboardPage() {
                 formatter={(value, name, props) => [`$${(value as number).toLocaleString()}`, name]}
                 contentStyle={{ borderRadius: '12px', boxShadow: '0 6px 15px rgba(0, 0, 0, 0.1)', border: 'none' }}
               />
-              <Legend iconType="circle" layout="horizontal" align="center" verticalAlign="bottom" wrapperStyle={{ paddingTop: '10px' }} />
+              <Legend iconType="circle" layout="vertical" align="right" verticalAlign="middle" wrapperStyle={{ paddingLeft: '10px' }} />
             </PieChart>
           </ChartContainer>
         </div>
@@ -228,4 +227,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
