@@ -1,3 +1,5 @@
+"use client"; // <-- **FIX: This tells Next.js to render this file in the browser, enabling React hooks and Recharts.**
+
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -418,5 +420,4 @@ export default function App() {
       </footer>
     </div>
   );
-}
-
+                                        }
