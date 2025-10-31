@@ -94,6 +94,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, color }) 
 );
 
 // CRITICAL: Wrapper to prevent Recharts hydration errors (TypeScript Fixed)
+// The children prop is now explicitly typed as ReactElement to fix the Vercel compilation error.
 const ChartContainer: React.FC<{ children: React.ReactElement }> = ({ children }) => {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
