@@ -1,10 +1,11 @@
-"use client"; // <-- **FIX: This tells Next.js to render this file in the browser, enabling React hooks and Recharts.**
+"use client"; // This is already correctly placed
 
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  LineChart, Line, BarChart, Bar, PieChart, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
-import { DollarSign, Filter, TrendingUp, Cpu, PieChartIcon } from 'lucide-react';
+// FIX: Corrected icon imports from lucide-react (BarChartIcon -> BarChart, PieChartIcon -> PieChart)
+import { DollarSign, Filter, TrendingUp, Cpu, PieChart, BarChart } from 'lucide-react';
 
 // ====================================================================
 // 1. TYPESCRIPT INTERFACES
@@ -144,9 +145,10 @@ interface ChartTypeSwitcherProps {
 const ChartTypeSwitcher: React.FC<ChartTypeSwitcherProps> = ({ currentType, onTypeChange }) => {
   const types: ChartType[] = ['Bar', 'Line', 'Pie'];
   const icons = {
-      'Bar': <BarChartIcon size={16} />,
+      // FIX: Changed BarChartIcon and PieChartIcon to the correct names from lucide-react
+      'Bar': <BarChart size={16} />,
       'Line': <TrendingUp size={16} />,
-      'Pie': <PieChartIcon size={16} />,
+      'Pie': <PieChart size={16} />, 
   }
 
   return (
@@ -283,6 +285,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, chartType, threshold }) =
         );
     }
 
+    // Note: Recharts PieChart component is distinct from the lucide-react PieChart icon.
+    // The PieChart from Recharts is imported at the top of the file as PieChart (implicitly)
     const ChartComponent = chartType === 'Bar' ? BarChart : LineChart;
     const DataComponent = chartType === 'Bar' ? Bar : Line;
 
@@ -301,8 +305,8 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, chartType, threshold }) =
                 />
                 <Legend />
                 <DataComponent dataKey="sales2024" name="2024 Sales" fill={chartType === 'Bar' ? '#3b82f6' : '#3b82f6'} stroke="#3b82f6" />
-                <DataComponent dataKey="sales2023" name="2023 Sales" fill={chartType === 'Bar' ? '#f59e0b' : '#f59e0b'} stroke="#f59e0b" />
-                <DataComponent dataKey="sales2022" name="2022 Sales" fill={chartType === 'Bar' ? '#10b981' : '#10b981'} stroke="#10b981" />
+                <DataComponent dataKey="sales2023" name="2024 Sales" fill={chartType === 'Bar' ? '#f59e0b' : '#f59e0b'} stroke="#f59e0b" />
+                <DataComponent dataKey="sales2022" name="2024 Sales" fill={chartType === 'Bar' ? '#10b981' : '#10b981'} stroke="#10b981" />
             </ChartComponent>
         </ResponsiveContainer>
     );
@@ -420,4 +424,4 @@ export default function App() {
       </footer>
     </div>
   );
-                                        }
+}
