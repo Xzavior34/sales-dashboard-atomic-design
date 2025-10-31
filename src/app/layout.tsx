@@ -1,4 +1,5 @@
-import './globals.css';
+// CRITICAL: The import keyword MUST be lowercase 'import'
+import './globals.css'; 
 
 // Define the metadata for the page
 export const metadata = {
@@ -13,12 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    // If Tailwind works, this "font-sans" class should be visible in the final HTML.
     <html lang="en">
-      {/* Apply a global font class and a minimum height to the body */}
       <body className="font-sans antialiased bg-gray-50 min-h-screen">
         {children}
       </body>
     </html>
   );
 }
-
